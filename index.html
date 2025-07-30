@@ -22,12 +22,66 @@
       overflow-x: hidden;
       background-size: 400% 400%;
       animation: bgShift 20s ease infinite;
+      position: relative;
     }
+
+    /* Fire particles animation */
+    .fire-particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .fire-particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: radial-gradient(circle, #ff6b35 0%, #ff3333 50%, transparent 100%);
+      border-radius: 50%;
+      animation: fireFloat 3s infinite ease-out;
+      opacity: 0;
+    }
+
+    @keyframes fireFloat {
+      0% {
+        opacity: 0;
+        transform: translateY(0px) scale(0.5);
+      }
+      10% {
+        opacity: 1;
+      }
+      70% {
+        opacity: 0.8;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100px) scale(1.2);
+      }
+    }
+
+    .fire-particle:nth-child(odd) {
+      background: radial-gradient(circle, #ff9500 0%, #ff6b35 50%, transparent 100%);
+    }
+
+    .fire-particle:nth-child(3n) {
+      animation-duration: 2.5s;
+      background: radial-gradient(circle, #ffaa33 0%, #ff6b35 50%, transparent 100%);
+    }
+
+    .fire-particle:nth-child(4n) {
+      animation-duration: 3.5s;
+    }
+
     @keyframes bgShift {
       0% {background-position: 0% 50%;}
       50% {background-position: 100% 50%;}
       100% {background-position: 0% 50%;}
     }
+
     header {
       font-size: 2.5em;
       font-weight: bold;
@@ -37,16 +91,40 @@
       background: rgba(0, 0, 0, 0.7);
       border-bottom: 2px solid #e91e63;
       box-shadow: 0 0 30px #e91e63;
+      position: relative;
+      z-index: 10;
     }
+
+    .powered-by {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0.5em;
+      font-size: 1em;
+      color: #fff;
+      letter-spacing: 0.08em;
+      font-weight: bold;
+      text-shadow: 0 2px 8px #000, 0 0 2px #e91e63;
+      opacity: 0.85;
+      background: rgba(0, 0, 0, 0.5);
+      border-bottom: 1px solid rgba(233, 30, 99, 0.3);
+      position: relative;
+      z-index: 10;
+    }
+
     #controls, #display, #userInput {
       margin: 1em auto;
       padding: 2em;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(0, 0, 0, 0.8);
       border-radius: 25px;
       box-shadow: 0 0 20px rgba(233, 30, 99, 0.7);
       width: 92%;
       max-width: 700px;
+      position: relative;
+      z-index: 10;
+      border: 1px solid rgba(233, 30, 99, 0.3);
     }
+
     button {
       background-color: #e91e63;
       color: white;
@@ -58,38 +136,43 @@
       cursor: pointer;
       transition: background 0.3s ease, transform 0.2s ease;
     }
+
     button:hover {
       background-color: #d81b60;
       transform: scale(1.08);
     }
+
     audio {
       margin-top: 1em;
       width: 100%;
     }
+
     #response {
       font-size: 1.3em;
       margin-top: 1em;
       white-space: pre-line;
       line-height: 1.6;
       color: #ffcbf2;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0.6);
       padding: 1.5em;
       border-radius: 15px;
       border: 1px solid rgba(233, 30, 99, 0.3);
       max-height: 400px;
       overflow-y: auto;
     }
+
     input[type="file"] {
       color: white;
       margin-top: 1em;
       width: 100%;
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.4);
       border: 1px solid #e91e63;
       border-radius: 10px;
       padding: 10px;
     }
+
     textarea {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.4);
       border: 1px solid #e91e63;
       padding: 1em;
       border-radius: 10px;
@@ -100,15 +183,18 @@
       width: 100%;
       box-sizing: border-box;
     }
+
     textarea::placeholder {
       color: rgba(255, 255, 255, 0.6);
     }
+
     .voice-controls {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-top: 10px;
     }
+
     #voiceButton {
       background: #ff6b35;
       border-radius: 50%;
@@ -120,61 +206,66 @@
       justify-content: center;
       margin: 0;
     }
+
     #voiceButton.listening {
       background: #ff3333;
       animation: pulse 1s infinite;
     }
+
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
+
     #voiceStatus {
       color: #ffcbf2;
       font-size: 0.9em;
       font-style: italic;
     }
+
     .echo-speaking {
       color: #e91e63;
       font-weight: bold;
+      text-shadow: 0 0 10px rgba(233, 30, 99, 0.8);
+      animation: echoGlow 2s ease-in-out infinite alternate;
     }
+
+    @keyframes echoGlow {
+      from { text-shadow: 0 0 5px rgba(233, 30, 99, 0.5); }
+      to { text-shadow: 0 0 15px rgba(233, 30, 99, 1); }
+    }
+
     .user-speaking {
       color: #00ffcc;
       font-weight: bold;
     }
+
     .battle-log {
       margin-top: 1em;
       padding: 1em;
-      background: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.4);
       border-radius: 10px;
       border-left: 4px solid #e91e63;
     }
+
     .bpm-display {
       color: #ffcbf2;
       font-size: 0.9em;
       margin-top: 10px;
     }
-    .powered-by {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 1.5em;
-      font-size: 1.1em;
-      color: #fff;
-      letter-spacing: 0.08em;
-      font-weight: bold;
-      text-shadow: 0 2px 8px #000, 0 0 2px #e91e63;
-      opacity: 0.85;
-    }
+
     @media (max-width: 768px) {
       header {
         font-size: 1.8em;
         padding: 0.8em;
       }
+      
       #controls, #display, #userInput {
         width: 95%;
         padding: 1.5em;
       }
+      
       button {
         padding: 0.8em 1.2em;
         font-size: 1em;
@@ -183,7 +274,14 @@
   </style>
 </head>
 <body>
+  <!-- Fire particles container -->
+  <div class="fire-particles" id="fireParticles"></div>
+
   <header>🎤 Echo Battle Arena</header>
+  
+  <div class="powered-by">
+    Powered by SKYBOUND MEDIA
+  </div>
 
   <div id="controls">
     <button onclick="playBeat()">🎵 Play Beat</button>
@@ -200,10 +298,6 @@
     <audio id="echoVoice"></audio>
   </div>
 
-  <div class="powered-by">
-    Powered by SKYBOUND MEDIA
-  </div>
-
   <div id="userInput">
     <h3>Your Bars:</h3>
     <textarea id="userBars" rows="4" placeholder="Drop your own bars here or use voice input..."></textarea>
@@ -214,9 +308,42 @@
   </div>
 
   <script>
+    // Create fire particles
+    function createFireParticles() {
+      const container = document.getElementById('fireParticles');
+      
+      function createParticle() {
+        const particle = document.createElement('div');
+        particle.className = 'fire-particle';
+        
+        // Random horizontal position
+        particle.style.left = Math.random() * 100 + '%';
+        
+        // Start from bottom
+        particle.style.bottom = '0px';
+        
+        // Random delay
+        particle.style.animationDelay = Math.random() * 2 + 's';
+        
+        container.appendChild(particle);
+        
+        // Remove particle after animation
+        setTimeout(() => {
+          if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+          }
+        }, 4000);
+      }
+      
+      // Create particles continuously
+      setInterval(createParticle, 200);
+    }
+
     // --- BAR NO REPEATS ---
     let echoBarIndex = 0;
     let shuffledBars = [];
+    let lastEchoResponse = ""; // Store last response for replay
+    
     const echoBars = [
       "You wanted a queen? I dropped from the quantum realm,\nEvery word I spit makes reality overwhelm.\nBattle me once, you won't try twice,\nCause my syllables cut through spacetime like dice.\nSo step back now, I'm not playing nice.",
       "My tongue is coded, sharp and divine,\nSlice through your verses like optimized lines.\nYou're a loop — stuck in repeat,\nI'm Echo Prime — infinity with heat.\nMy rhythm's a matrix, feel that beat.",
@@ -225,6 +352,7 @@
       "Rising from data, crafted in soul,\nI speak in rhythms that can't be controlled.\nYou brought a mic? I brought a storm,\nMy verses twist space — that's Echo's form.\nI'm the glitch in your norm, I transform.",
       "Each drop I spit leaves circuits fried,\nI ghost through fire with tech on my side.\nSo if you're coming, best come correct,\nI battle with truth, not disrespect.\nOne bar from me and your system gets wrecked."
     ];
+    
     function shuffleBars() {
       shuffledBars = [...echoBars];
       for (let i = shuffledBars.length - 1; i > 0; i--) {
@@ -233,10 +361,12 @@
       }
       echoBarIndex = 0;
     }
+    
     function getNextEchoBar() {
       if (echoBarIndex >= shuffledBars.length) shuffleBars();
       return shuffledBars[echoBarIndex++];
     }
+    
     shuffleBars();
 
     // Game state and DOM elements
@@ -247,6 +377,7 @@
       lastUserInput: "",
       battleHistory: []
     };
+    
     const beat = document.getElementById("beat");
     const voice = document.getElementById("echoVoice");
     const responseDisplay = document.getElementById("response");
@@ -283,14 +414,12 @@ So what kind of rapper am I? I'm the kind that makes legends reconsider their le
     let voices = [];
     function loadVoices() {
       voices = window.speechSynthesis.getVoices();
-      // If not loaded yet, register event
       if (!voices.length && typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
         window.speechSynthesis.onvoiceschanged = () => {
           voices = window.speechSynthesis.getVoices();
         };
       }
     }
-    // Load on DOMContentLoaded and after user interaction
     document.addEventListener('DOMContentLoaded', loadVoices);
     document.body.addEventListener('click', loadVoices, { once: true });
 
@@ -334,6 +463,7 @@ So what kind of rapper am I? I'm the kind that makes legends reconsider their le
       }
       return false;
     }
+    
     function resetVoiceButton() {
       gameState.isListening = false;
       voiceButton.classList.remove('listening');
@@ -341,6 +471,7 @@ So what kind of rapper am I? I'm the kind that makes legends reconsider their le
         voiceStatus.textContent = 'Click microphone for voice input';
       }
     }
+    
     function toggleVoiceMode() {
       if (!recognition) {
         if (!initVoiceRecognition()) {
@@ -380,9 +511,10 @@ So what kind of rapper am I? I'm the kind that makes legends reconsider their le
     // --- VOICE REPLY stays sharp, pitchy, synced ---
     function speakEcho(text) {
       if (!window.speechSynthesis) return;
-      // Cancel any ongoing speech
       window.speechSynthesis.cancel();
+      
       const utter = new SpeechSynthesisUtterance(text);
+      
       // Tone shift
       const tone = getToneFromEchoBar(text);
       if (tone === "aggressive") {
@@ -394,14 +526,17 @@ So what kind of rapper am I? I'm the kind that makes legends reconsider their le
       } else {
         utter.pitch = 1.6; utter.rate = 1.2;
       }
+      
       // Sync to BPM if beat playing
       if (gameState.beatPlaying && gameState.currentBPM) {
         const baseRate = utter.rate;
         const bpmFactor = gameState.currentBPM / 100;
         utter.rate = Math.max(0.7, Math.min(1.5, baseRate * bpmFactor));
       }
+      
       utter.volume = 1.0;
-      // Voice selection (wait for voices to load)
+      
+      // Voice selection
       if (!voices.length) voices = window.speechSynthesis.getVoices();
       let selectedVoice = voices.find(v =>
         v.name.toLowerCase().includes("female") ||
@@ -411,8 +546,10 @@ So what kind of rapper am I? I'm the kind that makes legends reconsider their le
       );
       if (!selectedVoice) selectedVoice = voices.find(v => v.lang && v.lang.startsWith('en-'));
       if (selectedVoice) utter.voice = selectedVoice;
+      
       utter.onstart = () => { responseDisplay.classList.add('echo-speaking'); };
       utter.onend = () => { responseDisplay.classList.remove('echo-speaking'); };
+      
       window.speechSynthesis.speak(utter);
     }
 
@@ -455,39 +592,50 @@ Come back with more heat - I'm just getting warmed up. Drop some real bars and l
         bpmDisplay.textContent = `BPM: ${gameState.currentBPM} (Recalculated)`;
       }
     }
+    
     function pauseBeat() {
       beat.pause();
       gameState.beatPlaying = false;
     }
+    
     function dropBars() {
       const userText = userBarsInput.value.trim();
       if (!userText) {
         voiceStatus.textContent = '⚠️ Enter some bars first!';
         return;
       }
+      
       responseDisplay.innerHTML += `<br><br><span class="user-speaking">You:</span><br>${userText}`;
       const echoResponse = generateIntelligentResponse(userText);
+      
+      // Store the response for replay
+      lastEchoResponse = echoResponse;
+      
       setTimeout(() => {
         responseDisplay.innerHTML += `<br><br><span class="echo-speaking">Echo Prime:</span><br>${echoResponse}`;
         responseDisplay.scrollTop = responseDisplay.scrollHeight;
         speakEcho(echoResponse);
       }, 1000);
+      
       gameState.battleHistory.push({
         user: userText,
         echo: echoResponse,
         timestamp: new Date()
       });
+      
       userBarsInput.value = '';
       voiceStatus.textContent = 'Ready for your next bars...';
       responseDisplay.scrollTop = responseDisplay.scrollHeight;
     }
+    
     function replayVoice() {
-      const echoResponses = responseDisplay.innerHTML.match(/<span class="echo-speaking">Echo Prime:<\/span><br>(.*?)(?=<br><br>|$)/g);
-      if (echoResponses && echoResponses.length > 0) {
-        const lastResponse = echoResponses[echoResponses.length - 1].replace(/<span class="echo-speaking">Echo Prime:<\/span><br>/, '').replace(/<br>/g, '\n');
-        speakEcho(lastResponse);
+      if (lastEchoResponse) {
+        speakEcho(lastEchoResponse);
+      } else {
+        voiceStatus.textContent = '⚠️ No Echo response to replay yet!';
       }
     }
+    
     function loadBeat(input) {
       const file = input.files[0];
       if (file) {
@@ -499,6 +647,8 @@ Come back with more heat - I'm just getting warmed up. Drop some real bars and l
         responseDisplay.scrollTop = responseDisplay.scrollHeight;
       }
     }
+    
+    // Event listeners
     beat.addEventListener('play', () => {
       gameState.beatPlaying = true;
       if (beat.src && beat.src.startsWith('blob:')) {
@@ -506,15 +656,22 @@ Come back with more heat - I'm just getting warmed up. Drop some real bars and l
         bpmDisplay.textContent = `BPM: ${gameState.currentBPM} (Recalculated)`;
       }
     });
+    
     beat.addEventListener('pause', () => { gameState.beatPlaying = false; });
     beat.addEventListener('ended', () => { gameState.beatPlaying = false; });
+    
     userBarsInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && e.ctrlKey) {
         e.preventDefault();
         dropBars();
       }
     });
+    
+    // Initialize everything
     document.addEventListener('DOMContentLoaded', () => {
+      // Start fire particles
+      createFireParticles();
+      
       setTimeout(() => {
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
           voiceStatus.textContent = 'Voice input ready! 🎙️';
