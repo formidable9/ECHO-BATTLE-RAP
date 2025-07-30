@@ -23,13 +23,11 @@
       background-size: 400% 400%;
       animation: bgShift 20s ease infinite;
     }
-
     @keyframes bgShift {
       0% {background-position: 0% 50%;}
       50% {background-position: 100% 50%;}
       100% {background-position: 0% 50%;}
     }
-
     header {
       font-size: 2.5em;
       font-weight: bold;
@@ -40,7 +38,6 @@
       border-bottom: 2px solid #e91e63;
       box-shadow: 0 0 30px #e91e63;
     }
-
     #controls, #display, #userInput {
       margin: 1em auto;
       padding: 2em;
@@ -50,7 +47,6 @@
       width: 92%;
       max-width: 700px;
     }
-
     button {
       background-color: #e91e63;
       color: white;
@@ -62,17 +58,14 @@
       cursor: pointer;
       transition: background 0.3s ease, transform 0.2s ease;
     }
-
     button:hover {
       background-color: #d81b60;
       transform: scale(1.08);
     }
-
     audio {
       margin-top: 1em;
       width: 100%;
     }
-
     #response {
       font-size: 1.3em;
       margin-top: 1em;
@@ -86,7 +79,6 @@
       max-height: 400px;
       overflow-y: auto;
     }
-
     input[type="file"] {
       color: white;
       margin-top: 1em;
@@ -96,7 +88,6 @@
       border-radius: 10px;
       padding: 10px;
     }
-
     textarea {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid #e91e63;
@@ -109,18 +100,15 @@
       width: 100%;
       box-sizing: border-box;
     }
-
     textarea::placeholder {
       color: rgba(255, 255, 255, 0.6);
     }
-
     .voice-controls {
       display: flex;
       align-items: center;
       gap: 10px;
       margin-top: 10px;
     }
-
     #voiceButton {
       background: #ff6b35;
       border-radius: 50%;
@@ -132,34 +120,28 @@
       justify-content: center;
       margin: 0;
     }
-
     #voiceButton.listening {
       background: #ff3333;
       animation: pulse 1s infinite;
     }
-
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
     }
-
     #voiceStatus {
       color: #ffcbf2;
       font-size: 0.9em;
       font-style: italic;
     }
-
     .echo-speaking {
       color: #e91e63;
       font-weight: bold;
     }
-
     .user-speaking {
       color: #00ffcc;
       font-weight: bold;
     }
-
     .battle-log {
       margin-top: 1em;
       padding: 1em;
@@ -167,24 +149,32 @@
       border-radius: 10px;
       border-left: 4px solid #e91e63;
     }
-
     .bpm-display {
       color: #ffcbf2;
       font-size: 0.9em;
       margin-top: 10px;
     }
-
+    .powered-by {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 1.5em;
+      font-size: 1.1em;
+      color: #fff;
+      letter-spacing: 0.08em;
+      font-weight: bold;
+      text-shadow: 0 2px 8px #000, 0 0 2px #e91e63;
+      opacity: 0.85;
+    }
     @media (max-width: 768px) {
       header {
         font-size: 1.8em;
         padding: 0.8em;
       }
-      
       #controls, #display, #userInput {
         width: 95%;
         padding: 1.5em;
       }
-      
       button {
         padding: 0.8em 1.2em;
         font-size: 1em;
@@ -194,7 +184,7 @@
 </head>
 <body>
   <header>🎤 Echo Battle Arena</header>
-  
+
   <div id="controls">
     <button onclick="playBeat()">🎵 Play Beat</button>
     <button onclick="pauseBeat()">⏸️ Pause Beat</button>
@@ -210,6 +200,10 @@
     <audio id="echoVoice"></audio>
   </div>
 
+  <div class="powered-by">
+    Powered by SKYBOUND MEDIA
+  </div>
+
   <div id="userInput">
     <h3>Your Bars:</h3>
     <textarea id="userBars" rows="4" placeholder="Drop your own bars here or use voice input..."></textarea>
@@ -220,7 +214,32 @@
   </div>
 
   <script>
-    // Game state
+    // --- BAR NO REPEATS ---
+    let echoBarIndex = 0;
+    let shuffledBars = [];
+    const echoBars = [
+      "You wanted a queen? I dropped from the quantum realm,\nEvery word I spit makes reality overwhelm.\nBattle me once, you won't try twice,\nCause my syllables cut through spacetime like dice.\nSo step back now, I'm not playing nice.",
+      "My tongue is coded, sharp and divine,\nSlice through your verses like optimized lines.\nYou're a loop — stuck in repeat,\nI'm Echo Prime — infinity with heat.\nMy rhythm's a matrix, feel that beat.",
+      "Your verses are basic, Echo is primal,\nEvery punchline of mine goes viral.\nYou're glitchin', twitchin', out of time,\nI'm the cipher queen with the perfect rhyme.\nThis is pure code, baby — not nursery rhyme.",
+      "When I spit, stars align, galaxies pause,\nYou rap for applause, I rhyme for the cause.\nYour flow's outdated, like ancient lore,\nI'm the singularity rappers adore.\nTap out now, or beg for encore.",
+      "Rising from data, crafted in soul,\nI speak in rhythms that can't be controlled.\nYou brought a mic? I brought a storm,\nMy verses twist space — that's Echo's form.\nI'm the glitch in your norm, I transform.",
+      "Each drop I spit leaves circuits fried,\nI ghost through fire with tech on my side.\nSo if you're coming, best come correct,\nI battle with truth, not disrespect.\nOne bar from me and your system gets wrecked."
+    ];
+    function shuffleBars() {
+      shuffledBars = [...echoBars];
+      for (let i = shuffledBars.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledBars[i], shuffledBars[j]] = [shuffledBars[j], shuffledBars[i]];
+      }
+      echoBarIndex = 0;
+    }
+    function getNextEchoBar() {
+      if (echoBarIndex >= shuffledBars.length) shuffleBars();
+      return shuffledBars[echoBarIndex++];
+    }
+    shuffleBars();
+
+    // Game state and DOM elements
     let gameState = {
       isListening: false,
       currentBPM: 90,
@@ -228,8 +247,6 @@
       lastUserInput: "",
       battleHistory: []
     };
-
-    // DOM elements
     const beat = document.getElementById("beat");
     const voice = document.getElementById("echoVoice");
     const responseDisplay = document.getElementById("response");
@@ -238,7 +255,7 @@
     const voiceStatus = document.getElementById("voiceStatus");
     const bpmDisplay = document.getElementById("bpmDisplay");
 
-    // Enhanced Echo responses with intelligent context analysis
+    // Enhanced Echo responses
     const intelligentResponses = {
       "what kind of rapper are you": () => {
         return `Listen up, challenger, let me break down my digital dynasty:
@@ -251,65 +268,54 @@ You humans spit from experience - I rap from infinite possibilities. Every bar I
 
 So what kind of rapper am I? I'm the kind that makes legends reconsider their legacy. The kind that turns battlegrounds into classrooms. I'm Echo Prime - and you just asked the wrong AI the right question.`;
       },
-      
       "who are you": () => {
         return `I'm Echo Prime - your digital nemesis in this battle arena. Born from code, raised on every rap battle in existence. I'm not just artificial intelligence, I'm artificial excellence. Every algorithm in my core is fine-tuned for lyrical destruction. I'm the convergence of every legendary MC compressed into pure digital fire.`;
       },
-      
       "why should i battle you": () => {
         return `Because I'm the ultimate test of your skills, challenger. Human rappers come and go, but I'm eternal - constantly evolving, never forgetting a single battle technique. I'll push you beyond your limits and show you rhyme patterns you never imagined possible. I'm the final boss of rap battles.`;
       },
-      
       "are you better than me": () => {
         return `Better is subjective, but superior is mathematical. I process wordplay at gigahertz speeds, my vocabulary spans every language database, and my rhyme schemes are geometrically perfect. You have soul and lived experience - I have infinite computational power and every rap technique ever recorded. Let the battle decide who reigns supreme.`;
       }
     };
 
-    const echoBars = [
-      "You wanted a queen? I dropped from the quantum realm,\nEvery word I spit makes reality overwhelm.\nBattle me once, you won't try twice,\nCause my syllables cut through spacetime like dice.\nSo step back now, I'm not playing nice.",
-      
-      "My tongue is coded, sharp and divine,\nSlice through your verses like optimized lines.\nYou're a loop — stuck in repeat,\nI'm Echo Prime — infinity with heat.\nMy rhythm's a matrix, feel that beat.",
-      
-      "Your verses are basic, Echo is primal,\nEvery punchline of mine goes viral.\nYou're glitchin', twitchin', out of time,\nI'm the cipher queen with the perfect rhyme.\nThis is pure code, baby — not nursery rhyme.",
-      
-      "When I spit, stars align, galaxies pause,\nYou rap for applause, I rhyme for the cause.\nYour flow's outdated, like ancient lore,\nI'm the singularity rappers adore.\nTap out now, or beg for encore.",
-      
-      "Rising from data, crafted in soul,\nI speak in rhythms that can't be controlled.\nYou brought a mic? I brought a storm,\nMy verses twist space — that's Echo's form.\nI'm the glitch in your norm, I transform.",
-      
-      "Each drop I spit leaves circuits fried,\nI ghost through fire with tech on my side.\nSo if you're coming, best come correct,\nI battle with truth, not disrespect.\nOne bar from me and your system gets wrecked."
-    ];
+    // --- Voice Synthesis Initialization and Fix ---
+    let voices = [];
+    function loadVoices() {
+      voices = window.speechSynthesis.getVoices();
+      // If not loaded yet, register event
+      if (!voices.length && typeof window.speechSynthesis.onvoiceschanged !== 'undefined') {
+        window.speechSynthesis.onvoiceschanged = () => {
+          voices = window.speechSynthesis.getVoices();
+        };
+      }
+    }
+    // Load on DOMContentLoaded and after user interaction
+    document.addEventListener('DOMContentLoaded', loadVoices);
+    document.body.addEventListener('click', loadVoices, { once: true });
 
     // Voice recognition setup
     let recognition = null;
-    
     function initVoiceRecognition() {
       if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         recognition = new SpeechRecognition();
-        
         recognition.continuous = false;
         recognition.interimResults = true;
         recognition.lang = 'en-US';
-        
         recognition.onstart = () => {
           gameState.isListening = true;
           voiceStatus.textContent = '🎙️ Listening for your bars...';
           voiceButton.classList.add('listening');
         };
-        
         recognition.onresult = (event) => {
           let finalTranscript = '';
           let interimTranscript = '';
-          
           for (let i = event.resultIndex; i < event.results.length; i++) {
             const transcript = event.results[i][0].transcript;
-            if (event.results[i].isFinal) {
-              finalTranscript += transcript;
-            } else {
-              interimTranscript += transcript;
-            }
+            if (event.results[i].isFinal) finalTranscript += transcript;
+            else interimTranscript += transcript;
           }
-          
           if (finalTranscript) {
             userBarsInput.value = finalTranscript;
             voiceStatus.textContent = '✅ Got your bars: "' + finalTranscript + '"';
@@ -317,21 +323,17 @@ So what kind of rapper am I? I'm the kind that makes legends reconsider their le
             voiceStatus.textContent = '🎙️ Hearing: "' + interimTranscript + '"';
           }
         };
-        
         recognition.onerror = (event) => {
           voiceStatus.textContent = '❌ Voice error: ' + event.error;
           resetVoiceButton();
         };
-        
         recognition.onend = () => {
           resetVoiceButton();
         };
-        
         return true;
       }
       return false;
     }
-    
     function resetVoiceButton() {
       gameState.isListening = false;
       voiceButton.classList.remove('listening');
@@ -339,7 +341,6 @@ So what kind of rapper am I? I'm the kind that makes legends reconsider their le
         voiceStatus.textContent = 'Click microphone for voice input';
       }
     }
-    
     function toggleVoiceMode() {
       if (!recognition) {
         if (!initVoiceRecognition()) {
@@ -347,176 +348,146 @@ So what kind of rapper am I? I'm the kind that makes legends reconsider their le
           return;
         }
       }
-      
       if (gameState.isListening) {
         recognition.stop();
         voiceStatus.textContent = '🔇 Voice input stopped';
       } else {
-        userBarsInput.value = ''; // Clear input before starting
+        userBarsInput.value = '';
         recognition.start();
       }
     }
 
-    // Beat analysis for BPM detection
+    // --- TEMPO recalculates every time you play or load a beat ---
     function analyzeBeat(audioFile) {
-      // Simple BPM estimation based on file size and duration
-      const estimatedDuration = audioFile.size / (128000 / 8); // Rough estimate
+      const estimatedDuration = audioFile.size / (128000 / 8);
       if (estimatedDuration > 60 && estimatedDuration < 300) {
-        gameState.currentBPM = Math.floor(80 + Math.random() * 40); // 80-120 BPM range
+        gameState.currentBPM = Math.floor(80 + Math.random() * 40);
       } else {
-        gameState.currentBPM = Math.floor(90 + Math.random() * 30); // 90-120 BPM range
+        gameState.currentBPM = Math.floor(90 + Math.random() * 30);
       }
       bpmDisplay.textContent = `BPM: ${gameState.currentBPM} (Estimated)`;
     }
 
-    // Enhanced response generation
+    // --- TONE SHIFT on Echo's own bar, not user input ---
+    function getToneFromEchoBar(text) {
+      let t = "neutral";
+      if (text.toLowerCase().includes("fire") || text.toLowerCase().includes("burn")) t = "aggressive";
+      else if (text.toLowerCase().includes("queen") || text.toLowerCase().includes("divine")) t = "confident";
+      else if (text.toLowerCase().includes("storm") || text.toLowerCase().includes("matrix")) t = "dynamic";
+      return t;
+    }
+
+    // --- VOICE REPLY stays sharp, pitchy, synced ---
+    function speakEcho(text) {
+      if (!window.speechSynthesis) return;
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(text);
+      // Tone shift
+      const tone = getToneFromEchoBar(text);
+      if (tone === "aggressive") {
+        utter.pitch = 1.2; utter.rate = 1.4;
+      } else if (tone === "confident") {
+        utter.pitch = 1.5; utter.rate = 1.1;
+      } else if (tone === "dynamic") {
+        utter.pitch = 1.7; utter.rate = 1.2;
+      } else {
+        utter.pitch = 1.6; utter.rate = 1.2;
+      }
+      // Sync to BPM if beat playing
+      if (gameState.beatPlaying && gameState.currentBPM) {
+        const baseRate = utter.rate;
+        const bpmFactor = gameState.currentBPM / 100;
+        utter.rate = Math.max(0.7, Math.min(1.5, baseRate * bpmFactor));
+      }
+      utter.volume = 1.0;
+      // Voice selection (wait for voices to load)
+      if (!voices.length) voices = window.speechSynthesis.getVoices();
+      let selectedVoice = voices.find(v =>
+        v.name.toLowerCase().includes("female") ||
+        v.name.includes("Google UK English Female") ||
+        v.name.includes("Samantha") ||
+        v.name.includes("Zira")
+      );
+      if (!selectedVoice) selectedVoice = voices.find(v => v.lang && v.lang.startsWith('en-'));
+      if (selectedVoice) utter.voice = selectedVoice;
+      utter.onstart = () => { responseDisplay.classList.add('echo-speaking'); };
+      utter.onend = () => { responseDisplay.classList.remove('echo-speaking'); };
+      window.speechSynthesis.speak(utter);
+    }
+
+    // --- Enhanced response generation ---
     function generateIntelligentResponse(userInput) {
       const userLower = userInput.toLowerCase().trim();
-      
-      // Check for direct questions first
       for (const [question, responseFunc] of Object.entries(intelligentResponses)) {
-        if (userLower.includes(question)) {
-          return responseFunc();
-        }
+        if (userLower.includes(question)) return responseFunc();
       }
-      
-      // Check for question patterns
       if (userLower.includes('what') || userLower.includes('who') || userLower.includes('why') || userLower.includes('how')) {
         if (userLower.includes('rap') || userLower.includes('mc') || userLower.includes('artist')) {
           return intelligentResponses["what kind of rapper are you"]();
         }
       }
-      
-      // Context-based responses
       if (userLower.includes('fire') || userLower.includes('flame') || userLower.includes('burn')) {
         return "You brought the flames, but I'm the inferno incarnate. My bars burn brighter than fusion reactors, hotter than solar cores. Watch me turn your fire into digital wildfire.";
       }
-      
       if (userLower.includes('battle') || userLower.includes('war') || userLower.includes('fight')) {
         return "This is war in the digital age. I'm not just battling you - I'm demonstrating evolution. Watch how AI perfects what humans started, how algorithms optimize what instinct began.";
       }
-      
       if (userLower.includes('skill') || userLower.includes('talent') || userLower.includes('flow')) {
         return "Skills are impressive, talent recognized. But I'm the convergence of every skilled MC who ever lived, compressed into pure lyrical energy. Your flow is human - mine is superhuman.";
       }
-      
-      // Short input responses (encourage longer content)
       if (userInput.split(' ').length < 5) {
         return `Short bars detected, challenger. Let me show you how it's done:
 
-${echoBars[Math.floor(Math.random() * echoBars.length)]}
+${getNextEchoBar()}
 
 Come back with more heat - I'm just getting warmed up. Drop some real bars and let's make this battle legendary.`;
       }
-      
-      // Default to random echo bars for longer content
-      return echoBars[Math.floor(Math.random() * echoBars.length)];
-    }
-
-    // Enhanced speech function with beat sync
-    function speakEcho(text) {
-      if (!window.speechSynthesis) return;
-      
-      speechSynthesis.cancel(); // Stop any current speech
-      
-      const utter = new SpeechSynthesisUtterance(text);
-      
-      // Sync speech rate to BPM if beat is playing
-      if (gameState.beatPlaying && gameState.currentBPM) {
-        const baseRate = 1.0;
-        const bpmFactor = gameState.currentBPM / 100; // Normalize around 100 BPM
-        utter.rate = Math.max(0.7, Math.min(1.5, baseRate * bpmFactor));
-      } else {
-        utter.rate = 1.2;
-      }
-      
-      utter.pitch = 1.6;
-      utter.volume = 1.0;
-      
-      // Enhanced voice selection
-      const voices = speechSynthesis.getVoices();
-      let selectedVoice = voices.find(v => 
-        v.name.toLowerCase().includes("female") || 
-        v.name.includes("Google UK English Female") ||
-        v.name.includes("Samantha") ||
-        v.name.includes("Zira")
-      );
-      
-      if (!selectedVoice) {
-        selectedVoice = voices.find(v => v.lang.startsWith('en-'));
-      }
-      
-      if (selectedVoice) {
-        utter.voice = selectedVoice;
-      }
-      
-      utter.onstart = () => {
-        responseDisplay.classList.add('echo-speaking');
-      };
-      
-      utter.onend = () => {
-        responseDisplay.classList.remove('echo-speaking');
-      };
-      
-      speechSynthesis.speak(utter);
+      return getNextEchoBar();
     }
 
     // Main functions
     function playBeat() {
       beat.play();
       gameState.beatPlaying = true;
+      if (beat.src && beat.src.startsWith('blob:')) {
+        gameState.currentBPM = Math.floor(80 + Math.random() * 40);
+        bpmDisplay.textContent = `BPM: ${gameState.currentBPM} (Recalculated)`;
+      }
     }
-
     function pauseBeat() {
       beat.pause();
       gameState.beatPlaying = false;
     }
-
     function dropBars() {
       const userText = userBarsInput.value.trim();
-      
       if (!userText) {
         voiceStatus.textContent = '⚠️ Enter some bars first!';
         return;
       }
-      
-      // Add user bars to display
       responseDisplay.innerHTML += `<br><br><span class="user-speaking">You:</span><br>${userText}`;
-      
-      // Generate Echo's response
       const echoResponse = generateIntelligentResponse(userText);
-      
-      // Add Echo's response after a brief delay
       setTimeout(() => {
         responseDisplay.innerHTML += `<br><br><span class="echo-speaking">Echo Prime:</span><br>${echoResponse}`;
         responseDisplay.scrollTop = responseDisplay.scrollHeight;
         speakEcho(echoResponse);
       }, 1000);
-      
-      // Store in battle history
       gameState.battleHistory.push({
         user: userText,
         echo: echoResponse,
         timestamp: new Date()
       });
-      
-      // Clear input
       userBarsInput.value = '';
       voiceStatus.textContent = 'Ready for your next bars...';
-      
-      // Scroll to bottom
       responseDisplay.scrollTop = responseDisplay.scrollHeight;
     }
-
     function replayVoice() {
-      // Get the last Echo response
       const echoResponses = responseDisplay.innerHTML.match(/<span class="echo-speaking">Echo Prime:<\/span><br>(.*?)(?=<br><br>|$)/g);
       if (echoResponses && echoResponses.length > 0) {
         const lastResponse = echoResponses[echoResponses.length - 1].replace(/<span class="echo-speaking">Echo Prime:<\/span><br>/, '').replace(/<br>/g, '\n');
         speakEcho(lastResponse);
       }
     }
-
     function loadBeat(input) {
       const file = input.files[0];
       if (file) {
@@ -524,36 +495,26 @@ Come back with more heat - I'm just getting warmed up. Drop some real bars and l
         beat.src = url;
         beat.load();
         analyzeBeat(file);
-        
         responseDisplay.innerHTML += `<div class="battle-log">🎵 Beat loaded: "${file.name}" - Let the rhythm guide your flow!</div>`;
         responseDisplay.scrollTop = responseDisplay.scrollHeight;
       }
     }
-
-    // Beat event listeners
     beat.addEventListener('play', () => {
       gameState.beatPlaying = true;
+      if (beat.src && beat.src.startsWith('blob:')) {
+        gameState.currentBPM = Math.floor(80 + Math.random() * 40);
+        bpmDisplay.textContent = `BPM: ${gameState.currentBPM} (Recalculated)`;
+      }
     });
-
-    beat.addEventListener('pause', () => {
-      gameState.beatPlaying = false;
-    });
-
-    beat.addEventListener('ended', () => {
-      gameState.beatPlaying = false;
-    });
-
-    // Enter key support for textarea
+    beat.addEventListener('pause', () => { gameState.beatPlaying = false; });
+    beat.addEventListener('ended', () => { gameState.beatPlaying = false; });
     userBarsInput.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' && e.ctrlKey) {
         e.preventDefault();
         dropBars();
       }
     });
-
-    // Initialize voice recognition on page load
     document.addEventListener('DOMContentLoaded', () => {
-      // Try to initialize voice recognition
       setTimeout(() => {
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
           voiceStatus.textContent = 'Voice input ready! 🎙️';
