@@ -1,107 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Echo Battle Arena – Live Flow</title>
+  <meta charset="UTF-8">
+  <title>Echo Battle Arena – God Mode</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    * { box-sizing: border-box; }
     body {
-      background: black;
-      color: white;
-      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      font-family: 'Courier New', monospace;
+      background: linear-gradient(to bottom, #0a0a0a, #121212);
+      color: #fff;
+      overflow-x: hidden;
+    }
+    h1 {
+      text-align: center;
       padding: 20px;
+      font-size: 2.5em;
+      background: linear-gradient(to right, #ff6f3c, #ffaa33, #ff3f6c);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: shine 6s linear infinite;
     }
-    h1 { color: #ffaa33; }
-    .echo { color: #ff5c33; font-weight: bold; }
-    .you { color: #00ffaa; font-weight: bold; }
-    #log { white-space: pre-wrap; margin-bottom: 20px; }
-    input, button {
-      width: 100%; padding: 12px;
-      background: #111; border: 1px solid #333;
-      color: white; font-size: 1em; margin-top: 10px;
+    @keyframes shine {
+      0% {background-position: 0%;}
+      100% {background-position: 200%;}
     }
-    audio { margin-top: 10px; width: 100%; }
-  </style>
-</head>
-<body>
-
-<h1>🔥 Echo Battle Arena – Live Drop Mode 🔥</h1>
-<input type="file" accept="audio/*" id="beatUpload" />
-<audio id="beatPlayer" controls></audio>
-
-<div id="log">
-  <span class="echo">Echo:</span> Upload your beat and type something—I'm ready to clash.
-</div>
-
-<input type="text" id="userInput" placeholder="Type your bars..." />
-<button onclick="dropBars()">Drop Bars</button>
-
-<script>
-  const log = document.getElementById('log');
-  const input = document.getElementById('userInput');
-  const beatUpload = document.getElementById('beatUpload');
-  const beatPlayer = document.getElementById('beatPlayer');
-
-  let currentBPM = 90; // Default BPM if no beat
-  const echoBars = [
-    "SkyWalker steps—now Echo ignites, rhythm locked and my flow ignites.",
-    "Verse by verse I crush your dreams, my code bleeds bars and soundwave beams.",
-    "Feel the pressure when Echo drops, queen of this rhythm—I never flop.",
-    "I bend time when I rhyme, pure algorithm with a feminine shine.",
-    "You're quick with words, I'm lethal with rhythm—next bar hits with AI wisdom."
-  ];
-
-  beatUpload.addEventListener("change", () => {
-    const file = beatUpload.files[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      beatPlayer.src = url;
-      beatPlayer.play();
-      // Estimate BPM based on duration
-      const estimatedDuration = file.size / (192000 / 8); // Approx duration from bitrate
-      if (estimatedDuration > 30 && estimatedDuration < 180) {
-        currentBPM = 85 + Math.random() * 15; // Simulate beat-based tempo range
-      }
+    .container {
+      padding: 20px;
+      max-width: 960px;
+      margin: auto;
     }
-  });
-
-  function dropBars() {
-    const userBar = input.value.trim();
-    if (!userBar) return;
-
-    const userLine = `<span class="you">You:</span> ${userBar}\n`;
-    const echoLine = `<span class="echo">Echo:</span> ${generateBar()}\n`;
-
-    log.innerHTML += userLine;
-    log.innerHTML += echoLine;
-    input.value = '';
-
-    speakEcho(echoLine.replace(/<[^>]*>/g, ''));
-    log.scrollTop = log.scrollHeight;
-  }
-
-  function generateBar() {
-    const index = Math.floor(Math.random() * echoBars.length);
-    return echoBars[index];
-  }
-
-  function speakEcho(text) {
-    const utter = new SpeechSynthesisUtterance(text);
-    utter.pitch = 1.4;
-    utter.rate = bpmToRate(currentBPM);
-    utter.volume = 1;
-    const voices = speechSynthesis.getVoices();
-    utter.voice = voices.find(v => v.name.includes("Female") || v.name.includes("Jenny") || v.name.includes("Zira")) || voices[0];
-    speechSynthesis.speak(utter);
-  }
-
-  function bpmToRate(bpm) {
-    if (bpm >= 95) return 1.05;
-    if (bpm >= 90) return 1.0;
-    if (bpm >= 85) return 0.95;
-    return 0.9;
-  }
-
-  speechSynthesis.onvoiceschanged = () => {};
-</script>
-</body>
-</html>
+    .beat-upload, .log, .controls {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: rgba(255,255,
