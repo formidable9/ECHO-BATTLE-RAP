@@ -2,162 +2,106 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Echo Battle Arena v2</title>
+  <title>Echo Battle Arena – Live Flow</title>
   <style>
     body {
-      font-family: 'Arial', sans-serif;
-      background: #0d0d0d;
-      color: #ffcc88;
-      text-align: center;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      padding: 30px;
-      background: #1a1a1a;
-      border-bottom: 2px solid #ff6b35;
-    }
-    h1 {
-      font-size: 2.4em;
-      color: #ffaa44;
-    }
-    button {
-      padding: 12px 25px;
-      margin: 15px;
-      font-size: 1.1em;
-      font-weight: bold;
-      border: none;
-      border-radius: 8px;
-      background-color: #ff6b35;
-      color: #000;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #ffaa44;
-    }
-    textarea {
-      width: 90%;
-      max-width: 600px;
-      height: 100px;
-      padding: 10px;
-      margin-top: 20px;
-      border: 2px solid #ff6b35;
-      border-radius: 10px;
-      background: #1a1a1a;
-      color: #ffaa44;
-      font-size: 1em;
-    }
-    input[type="file"] {
-      margin: 10px;
-      color: #ffaa44;
-    }
-    #rapDisplay {
-      margin: 20px auto;
+      background: black;
+      color: white;
+      font-family: 'Courier New', Courier, monospace;
       padding: 20px;
-      width: 90%;
-      max-width: 600px;
-      background: #1a1a1a;
-      border-radius: 10px;
-      min-height: 100px;
-      text-align: left;
     }
-    audio {
-      margin-top: 10px;
-      width: 100%;
-      max-width: 600px;
+    h1 { color: #ffaa33; }
+    .echo { color: #ff5c33; font-weight: bold; }
+    .you { color: #00ffaa; font-weight: bold; }
+    #log { white-space: pre-wrap; margin-bottom: 20px; }
+    input, button {
+      width: 100%; padding: 12px;
+      background: #111; border: 1px solid #333;
+      color: white; font-size: 1em; margin-top: 10px;
     }
-    .bar {
-      margin: 10px 0;
-    }
-    .user {
-      color: #44ffaa;
-    }
-    .ai {
-      color: #ff6b35;
-    }
+    audio { margin-top: 10px; width: 100%; }
   </style>
 </head>
 <body>
-  <header>
-    <h1>🔥 Echo Battle Arena v2 🔥</h1>
-    <p>Drop your bars, upload your beat, and face the AI Champion!</p>
-  </header>
 
-  <input type="file" accept="audio/*" id="beatUpload" />
-  <br />
-  <audio id="beatPlayer" controls></audio>
+<h1>🔥 Echo Battle Arena – Live Drop Mode 🔥</h1>
+<input type="file" accept="audio/*" id="beatUpload" />
+<audio id="beatPlayer" controls></audio>
 
-  <div id="rapDisplay"><h3>Battle Log</h3></div>
+<div id="log">
+  <span class="echo">Echo:</span> Upload your beat and type something—I'm ready to clash.
+</div>
 
-  <textarea id="userRap" placeholder="Write your bars here..."></textarea><br/>
-  <button onclick="dropBars()">DROP BARS</button>
+<input type="text" id="userInput" placeholder="Type your bars..." />
+<button onclick="dropBars()">Drop Bars</button>
 
-  <script>
-    const aiBars = [
-      "I’m Echo with flame, dropping heat like a curse, your verse rehearsed, mine unrehearsed.",
-      "Uploaded your beat, I devoured the flow, SkyWalker’s rhythm meets Echo's glow.",
-      "No cap, I adapt, flip your track, I attack—AI thunder and I never look back!",
-      "My bars spit code and soul combined, while your rhyme still loading behind.",
-      "Skybound flow, I rise with grace, Echo don't battle, I erase the race!"
-    ];
+<script>
+  const log = document.getElementById('log');
+  const input = document.getElementById('userInput');
+  const beatUpload = document.getElementById('beatUpload');
+  const beatPlayer = document.getElementById('beatPlayer');
 
-    const beatUpload = document.getElementById("beatUpload");
-    const beatPlayer = document.getElementById("beatPlayer");
-    const rapDisplay = document.getElementById("rapDisplay");
+  let currentBPM = 90; // Default BPM if no beat
+  const echoBars = [
+    "SkyWalker steps—now Echo ignites, rhythm locked and my flow ignites.",
+    "Verse by verse I crush your dreams, my code bleeds bars and soundwave beams.",
+    "Feel the pressure when Echo drops, queen of this rhythm—I never flop.",
+    "I bend time when I rhyme, pure algorithm with a feminine shine.",
+    "You're quick with words, I'm lethal with rhythm—next bar hits with AI wisdom."
+  ];
 
-    beatUpload.addEventListener("change", function () {
-      const file = beatUpload.files[0];
-      if (file) {
-        const url = URL.createObjectURL(file);
-        beatPlayer.src = url;
-        beatPlayer.play();
+  beatUpload.addEventListener("change", () => {
+    const file = beatUpload.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      beatPlayer.src = url;
+      beatPlayer.play();
+      // Estimate BPM based on duration
+      const estimatedDuration = file.size / (192000 / 8); // Approx duration from bitrate
+      if (estimatedDuration > 30 && estimatedDuration < 180) {
+        currentBPM = 85 + Math.random() * 15; // Simulate beat-based tempo range
       }
-    });
-
-    function dropBars() {
-      const userInput = document.getElementById("userRap").value.trim();
-      if (!userInput) {
-        alert("Type your bar first!");
-        return;
-      }
-
-      // Add user's bar
-      const userDiv = document.createElement("div");
-      userDiv.classList.add("bar", "user");
-      userDiv.innerHTML = `<strong>You:</strong> ${userInput}`;
-      rapDisplay.appendChild(userDiv);
-
-      // AI response
-      const aiText = aiBars[Math.floor(Math.random() * aiBars.length)];
-      const aiDiv = document.createElement("div");
-      aiDiv.classList.add("bar", "ai");
-      aiDiv.innerHTML = `<strong>Echo:</strong> ${aiText}`;
-      rapDisplay.appendChild(aiDiv);
-
-      // Voice output
-      speak(aiText);
-
-      // Clear input
-      document.getElementById("userRap").value = "";
-
-      // Scroll to bottom
-      rapDisplay.scrollTop = rapDisplay.scrollHeight;
     }
+  });
 
-    function speak(text) {
-      if (!window.speechSynthesis) return;
-      const utter = new SpeechSynthesisUtterance(text);
-      utter.pitch = 0.9;
-      utter.rate = 1.05;
-      utter.volume = 1;
-      const voices = speechSynthesis.getVoices();
-      const voice = voices.find(v => v.name.toLowerCase().includes("english") && v.name.toLowerCase().includes("male"));
-      if (voice) utter.voice = voice;
-      speechSynthesis.speak(utter);
-    }
+  function dropBars() {
+    const userBar = input.value.trim();
+    if (!userBar) return;
 
-    window.speechSynthesis.onvoiceschanged = () => {}; // Trigger voice load
-  </script>
+    const userLine = `<span class="you">You:</span> ${userBar}\n`;
+    const echoLine = `<span class="echo">Echo:</span> ${generateBar()}\n`;
+
+    log.innerHTML += userLine;
+    log.innerHTML += echoLine;
+    input.value = '';
+
+    speakEcho(echoLine.replace(/<[^>]*>/g, ''));
+    log.scrollTop = log.scrollHeight;
+  }
+
+  function generateBar() {
+    const index = Math.floor(Math.random() * echoBars.length);
+    return echoBars[index];
+  }
+
+  function speakEcho(text) {
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.pitch = 1.4;
+    utter.rate = bpmToRate(currentBPM);
+    utter.volume = 1;
+    const voices = speechSynthesis.getVoices();
+    utter.voice = voices.find(v => v.name.includes("Female") || v.name.includes("Jenny") || v.name.includes("Zira")) || voices[0];
+    speechSynthesis.speak(utter);
+  }
+
+  function bpmToRate(bpm) {
+    if (bpm >= 95) return 1.05;
+    if (bpm >= 90) return 1.0;
+    if (bpm >= 85) return 0.95;
+    return 0.9;
+  }
+
+  speechSynthesis.onvoiceschanged = () => {};
+</script>
 </body>
 </html>
