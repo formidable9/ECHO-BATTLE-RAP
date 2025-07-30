@@ -2,10 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Echo Battle Arena</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Rap Battle Arena</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #0d0d0d;
+            color: #ff6b35;
+            text-align: center;
+        }
+        header {
+            padding: 30px;
+            background: #1a1a1a;
+            border-bottom: 2px solid #ff6b35;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+        button {
+            margin: 20px;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 10px;
+            background: #ff6b35;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #ffaa44;
+        }
+        #rapDisplay {
+            margin: 20px auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 600px;
+            background: #1a1a1a;
+            border-radius: 10px;
+            min-height: 100px;
+        }
+        textarea {
+            width: 90%;
+            max-width: 600px;
+            padding: 10px;
+            font-size: 1.1em;
+            border: 2px solid #ff6b35;
+            border-radius: 8px;
+            background: #0d0d0d;
+            color: #ffaa44;
+        }
+    </style>
 </head>
 <body>
-    <h1>Echo Battle Arena is Live!</h1>
-    <p>This is your full app content. Ready to drop bars and launch battles.</p>
+    <header>
+        <h1>🎤 AI RAP BATTLE ARENA 🎤</h1>
+        <p>Drop your bars and face the AI Champion!</p>
+    </header>
+    
+    <div id="rapDisplay">🎵 Choose a beat and start rapping! 🎵</div>
+
+    <textarea id="userRap" placeholder="Type your bars here..."></textarea><br>
+    <button onclick="dropBars()">DROP BARS</button>
+
+    <script>
+        const aiRaps = [
+            "I’m the AI champ, no human can see me, spinning hot bars like I’m on your TV.",
+            "You bring weak rhymes, but I bring precision, my flow is electric with nuclear vision.",
+            "Call me Echo, the one with the crown, each line I drop gonna shut you down."
+        ];
+
+        function dropBars() {
+            const userRap = document.getElementById('userRap').value.trim();
+            if (!userRap) {
+                alert("Write your bars first!");
+                return;
+            }
+            const randomAi = aiRaps[Math.floor(Math.random() * aiRaps.length)];
+            document.getElementById('rapDisplay').innerHTML = `
+                <p><strong>You:</strong> ${userRap}</p>
+                <p><strong>AI:</strong> ${randomAi}</p>
+            `;
+            document.getElementById('userRap').value = "";
+        }
+    </script>
 </body>
 </html>
