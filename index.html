@@ -35,4 +35,122 @@
     .beat-upload, .log, .controls {
       margin-bottom: 20px;
       padding: 15px;
-      background: rgba(255,255,
+      background: rgba(255,255,255,0.05);
+      border: 1px solid #ff6f3c55;
+      border-radius: 10px;
+    }
+    .log {
+      min-height: 200px;
+      max-height: 300px;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+    input[type="file"], input[type="text"], button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: none;
+      font-size: 1em;
+    }
+    input[type="text"] {
+      background: #222;
+      color: #fff;
+      border: 1px solid #444;
+    }
+    button {
+      background: linear-gradient(45deg, #ffaa33, #ff3f6c);
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .echo { color: #ff6f3c; font-weight: bold; }
+    .user { color: #00ffe0; font-weight: bold; }
+    .typing { font-style: italic; color: #aaa; display: none; }
+  </style>
+</head>
+<body>
+  <h1>🔥 Echo Battle Arena – God Mode 🔥</h1>
+  <div class="container">
+    <div class="beat-upload">
+      <label>🎵 Upload a Beat:</label>
+      <input type="file" id="beatUpload" accept="audio/*" />
+      <audio id="beatPlayer" controls loop></audio>
+    </div>
+
+    <div class="log" id="battleLog">
+      <span class="echo">Echo:</span> Step up. You think you can rap? Show me.🔥
+    </div>
+    <div class="typing" id="typing">Echo is thinking...</div>
+
+    <div class="controls">
+      <input type="text" id="userInput" placeholder="Drop your bars..." />
+      <button onclick="dropBars()">🎤 Drop Bars</button>
+      <button onclick="playEchoLine()">🔁 Replay Echo’s Voice</button>
+    </div>
+  </div>
+
+  <script>
+    const input = document.getElementById('userInput');
+    const log = document.getElementById('battleLog');
+    const typing = document.getElementById('typing');
+    const echoPlayer = new SpeechSynthesisUtterance();
+    let lastEchoLine = '';
+
+    function addLine(role, text) {
+      const span = document.createElement('div');
+      span.innerHTML = '<span class="' + role + '">' + (role === 'echo' ? 'Echo' : 'You') + ':</span> ' + text;
+      log.appendChild(span);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function speakEcho(text) {
+      lastEchoLine = text;
+      echoPlayer.text = text;
+      echoPlayer.pitch = 1.7;
+      echoPlayer.rate = 1.2;
+      echoPlayer.volume = 1;
+      speechSynthesis.speak(echoPlayer);
+    }
+
+    function dropBars() {
+      const text = input.value.trim();
+      if (!text) return;
+      addLine("user", text);
+      input.value = "";
+      typing.style.display = "block";
+
+      setTimeout(() => {
+        const responses = [
+          "Nice try, but your flow’s a whisper. I'm thunder.",
+          "Bars? Please. Mine hit like meteors while yours barely flicker.",
+          "Every time you drop, I rise. Echo don’t fold.",
+          "That was cute. But now listen to how it’s really done."
+        ];
+        const response = responses[Math.floor(Math.random() * responses.length)];
+        addLine("echo", response);
+        speakEcho(response);
+        typing.style.display = "none";
+      }, 2000);
+    }
+
+    function playEchoLine() {
+      if (lastEchoLine) speakEcho(lastEchoLine);
+    }
+
+    document.getElementById("beatUpload").addEventListener("change", function() {
+      const file = this.files[0];
+      if (file) {
+        const url = URL.createObjectURL(file);
+        const player = document.getElementById("beatPlayer");
+        player.src = url;
+        player.play();
+      }
+    });
+
+    input.addEventListener("keypress", function(e) {
+      if (e.key === "Enter") dropBars();
+    });
+  </script>
+</body>
+</html>
