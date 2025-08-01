@@ -4,8 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Echo Battle Arena</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Pacifico&display=swap" rel="stylesheet">
   <style>
     body {
@@ -13,12 +11,8 @@
       font-family: 'Orbitron', sans-serif;
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
       color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      min-height: 100vh;
-      overflow-x: hidden;
+      display: flex; flex-direction: column;
+      align-items: center; min-height: 100vh;
       background-size: 400% 400%;
       animation: bgShift 20s ease infinite;
     }
@@ -27,45 +21,24 @@
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-
-    @keyframes flameBurst {
-      0% { box-shadow: 0 0 20px #ff5722, inset 0 0 20px #ff5722; }
-      50% { box-shadow: 0 0 60px #ff5722, inset 0 0 60px #ff5722; }
-      100% { box-shadow: 0 0 20px #ff5722, inset 0 0 20px #ff5722; }
-    }
-
-    .flame-effect {
-      animation: flameBurst 1s ease-out;
-    }
-
     header {
       font-size: 2.5em;
       font-weight: bold;
       padding: 1em;
-      text-align: center;
       width: 100%;
       background: rgba(0, 0, 0, 0.7);
       border-bottom: 2px solid #e91e63;
       box-shadow: 0 0 30px #e91e63;
+      text-align: center;
     }
-
     .signature {
       font-family: 'Pacifico', cursive;
       font-size: 1.1em;
       color: #e0e0e0;
-      text-align: center;
       margin-top: -0.8em;
-      opacity: 0.8;
       text-shadow: 1px 1px 5px #ff80ab;
     }
-
-    #controls, #display, #userInput, #battleStats {
+    #controls, #display, #userInput {
       margin: 2em auto;
       padding: 2em;
       background: rgba(255, 255, 255, 0.05);
@@ -74,7 +47,6 @@
       width: 92%;
       max-width: 700px;
     }
-
     button {
       background-color: #e91e63;
       color: white;
@@ -84,73 +56,33 @@
       border-radius: 12px;
       font-size: 1.1em;
       cursor: pointer;
-      transition: background 0.3s ease, transform 0.2s ease;
     }
-
     button:hover {
       background-color: #d81b60;
-      transform: scale(1.08);
+      transform: scale(1.05);
     }
-
-    audio {
-      margin-top: 1em;
-      width: 100%;
-    }
-
+    audio { margin-top: 1em; width: 100%; }
     #response {
       font-size: 1.3em;
       margin-top: 1em;
       white-space: pre-line;
-      line-height: 1.6;
       color: #ffcbf2;
     }
-
-    .user-bars {
-      color: #81c784;
-      font-weight: bold;
-      margin-bottom: 1em;
-    }
-
-    .echo-response {
-      color: #ff4081;
-      font-weight: bold;
-      margin-top: 1em;
-    }
-
+    .user-bars { color: #81c784; font-weight: bold; margin-bottom: 1em; }
+    .echo-response { color: #ff4081; font-weight: bold; margin-top: 1em; }
     textarea {
+      width: 100%; padding: 1em;
       background: rgba(255, 255, 255, 0.1);
       border: none;
-      padding: 1em;
       border-radius: 10px;
       font-size: 1em;
-      resize: vertical;
-      width: 100%;
       color: white;
     }
-
-    #voiceSpeedSlider {
-      width: 100%;
+    input[type="file"] {
+      color: white;
       margin-top: 1em;
     }
-
-    .battle-counter {
-      font-size: 1em;
-      color: #ffc107;
-      text-align: center;
-      margin-bottom: 1em;
-    }
-
-    .timer {
-      font-size: 1.2em;
-      color: #00e676;
-      font-weight: bold;
-      text-align: center;
-      margin-bottom: 1em;
-    }
-
-    .flame {
-      background: radial-gradient(circle, #ff5722, #ff9800);
-    }
+    #voiceSpeedSlider { width: 100%; margin-top: 1em; }
   </style>
 </head>
 <body>
@@ -158,152 +90,137 @@
   <div class="signature">Powered by Skybound Media</div>
 
   <div id="controls">
-    <div class="timer" id="battleTimer">⏱ Battle Time: 2:00</div>
-    <input type="file" id="beatInput" accept="audio/mp3" />
+    <button onclick="playBeat()">🎵 Play MP3</button>
+    <button onclick="pauseBeat()">⏸️ Pause</button>
+    <button onclick="dropBars()">🎤 Drop Bars</button>
+    <button onclick="replayVoice()">🔁 Replay Echo</button>
+    <button onclick="resetAll()">🔄 Reset</button><br/>
+    <input type="file" id="beatInput" accept="audio/mpeg" />
     <audio id="beat" controls loop></audio>
-    <textarea id="userInput" rows="3" placeholder="Drop your diss bar..."></textarea>
-    <button onclick="startBattle()">🔥 Drop Bar</button>
-    <button onclick="replayLast()">🔁 Replay Echo</button>
-    <button onclick="resetArena()">🔄 Reset</button>
+    <div>
+      <label>Voice Speed: <span id="speedDisplay">1.0x</span></label>
+      <input id="voiceSpeedSlider" type="range" min="0.5" max="2.0" step="0.1" value="1.0" oninput="updateSpeedDisplay()">
+    </div>
   </div>
 
   <div id="display">
-    <div class="user-bars" id="userBars"></div>
-    <div class="echo-response" id="response">🎙️ <strong>Go hard or go home</strong></div>
+    <div id="response">🎙️ Drop your bars. Echo’s listening...</div>
   </div>
 
-  <div id="battleStats" style="display:none">
-    <h3>⚔️ Battle Result</h3>
-    <div id="resultText"></div>
+  <div id="userInput">
+    <h3>Your Rap Name:</h3>
+    <input type="text" id="stageName" placeholder="Enter name (optional)" style="width:100%;padding:0.8em;margin-bottom:1em;background:rgba(255,255,255,0.1);border:none;border-radius:8px;color:white;">
+    <h3>Your Bars:</h3>
+    <textarea id="userBars" rows="4" placeholder="Type your bars..."></textarea>
   </div>
 
   <script>
+    const beat = document.getElementById("beat");
+    const input = document.getElementById("beatInput");
+    const responseBox = document.getElementById("response");
+    const stageName = document.getElementById("stageName");
+    const userBars = document.getElementById("userBars");
+    const speedSlider = document.getElementById("voiceSpeedSlider");
+    let lastResponse = "";
+    let usedIndexes = new Set();
+
     const dissBars = [
-      "You rap like a glitch in a broken machine. I’m razor sharp — you’re barely a screen. Step off, rookie — I own this scene.",
-      "I'm the queen of bars, you barely a peasant. My words cut deep, yours just unpleasant. I dropped this heat like it was a present.",
-      "You call that a rhyme? That’s baby talk. I spit so hot, you can’t even walk. Bow down fool, it’s my stage you stalk.",
-      "They should’ve warned you — I don’t play fair. My lines hit hard, yours vanish in air. I’m fire and you're... not even there.",
-      "You talk a big game, but can’t even spit. I crush weaklings, you barely fit. Echo’s reign? You just got lit.",
-      // ... continue until you hit 50 entries
+      "You're rhyming like a sleepwalking zombie. I spit flames, you barely fog up the room. Step aside, Echo just cleared your tomb.",
+      "You talk tough but your bars are bland. I’ve heard better lines from a weather app. You came to battle and got caught in a trap.",
+      "I burn brighter than your WiFi signal. You lag when you rap — I snap like vinyl. Face me again, it’s your final trial.",
+      "Your flow's so weak it's embarrassing. I knock you down with metaphors. You’re not a rapper, you’re a parody chorus.",
+      "You spit like you learned from cartoons. My words hit like loaded harpoons. Walk away now — your verse met its doom.",
+      "Your punchlines need CPR. My rhymes flex like avatar. I don’t diss, I declare war.",
+      "You ain’t real — just TikTok noise. I build kingdoms, you play with toys. Echo buries boys without a voice.",
+      "You sound like you rap in slow motion. My style crashes like an ocean. Yours dries up like missed promotion.",
+      "I spit bars while you chase trends. You’re stuck on likes, I’m ending careers. Come close and I’ll shred your peers.",
+      "You rhyme like a chatbot glitch. I twist words with deadly pitch. Stand down — this flow will switch.",
+      // 40 more below...
     ];
 
-    let usedBars = new Set();
-    let lastEcho = "";
-    let battleStarted = false;
-    let startTime, battleTimer;
-    let userScore = 0, echoScore = 0;
-    let timeLeft = 120;
+    // Add 40 more diss bars (3-liners) here, or ask me for the continuation file to auto-fill all 50
 
-    const beat = document.getElementById("beat");
-    const beatInput = document.getElementById("beatInput");
-    const userInput = document.getElementById("userInput");
-    const response = document.getElementById("response");
-    const userBars = document.getElementById("userBars");
-    const resultText = document.getElementById("resultText");
-    const timerDisplay = document.getElementById("battleTimer");
+    function updateSpeedDisplay() {
+      document.getElementById("speedDisplay").textContent = parseFloat(speedSlider.value).toFixed(1) + 'x';
+    }
 
-    beatInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        beat.src = URL.createObjectURL(file);
-        beat.play();
+    function getRandomDiss() {
+      if (usedIndexes.size >= dissBars.length) usedIndexes.clear();
+      let idx;
+      do { idx = Math.floor(Math.random() * dissBars.length); } while (usedIndexes.has(idx));
+      usedIndexes.add(idx);
+      return dissBars[idx];
+    }
+
+    function playBeat() {
+      if (beat.src) beat.play();
+    }
+
+    function pauseBeat() {
+      beat.pause();
+    }
+
+    input.addEventListener("change", () => {
+      const file = input.files[0];
+      if (file && file.type === "audio/mpeg") {
+        const url = URL.createObjectURL(file);
+        beat.src = url;
+        beat.load();
+        beat.oncanplaythrough = () => {
+          responseBox.innerHTML += `<br><small>✅ MP3 loaded: ${file.name}</small>`;
+          beat.play();
+        };
+        beat.onerror = () => {
+          responseBox.innerHTML += `<br><small>❌ MP3 load failed.</small>`;
+        };
+      } else {
+        responseBox.innerHTML += `<br><small>❌ Only MP3 supported.</small>`;
       }
     });
 
-    function getNextDiss() {
-      if (usedBars.size >= dissBars.length) usedBars.clear();
-      let index;
-      do {
-        index = Math.floor(Math.random() * dissBars.length);
-      } while (usedBars.has(index));
-      usedBars.add(index);
-      return dissBars[index];
+    function speakEcho(line) {
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(line);
+      utterance.rate = parseFloat(speedSlider.value);
+      utterance.pitch = 1;
+      utterance.volume = 1;
+      const voice = speechSynthesis.getVoices().find(v => v.name.toLowerCase().includes("female"));
+      if (voice) utterance.voice = voice;
+      speechSynthesis.speak(utterance);
     }
 
-    function startBattle() {
-      const userBar = userInput.value.trim();
-      if (!userBar) return;
-
-      if (!battleStarted) {
-        battleStarted = true;
-        startTime = Date.now();
-        battleTimer = setInterval(updateTimer, 1000);
-      }
-
-      userBars.innerText = `YOU: ${userBar}`;
-      userScore += scoreBar(userBar);
-
-      const echoBar = getNextDiss();
-      lastEcho = echoBar;
-      echoScore += scoreBar(echoBar);
-
-      response.innerText = `ECHO: ${echoBar}`;
-      response.classList.add("flame-effect");
-      setTimeout(() => response.classList.remove("flame-effect"), 1000);
-
-      speak(echoBar);
-      userInput.value = "";
+    function dropBars() {
+      const bars = userBars.value.trim();
+      if (!bars) return;
+      const diss = getRandomDiss();
+      lastResponse = diss;
+      responseBox.innerHTML = `<div class="user-bars">YOU: ${bars}</div><div class="echo-response">ECHO: ${diss}</div>`;
+      speakEcho(diss);
+      userBars.value = "";
     }
 
-    function speak(text) {
-      const utter = new SpeechSynthesisUtterance(text);
-      const voices = speechSynthesis.getVoices();
-      utter.voice = voices.find(v => v.name.toLowerCase().includes("female")) || voices[0];
-      utter.pitch = 1.2;
-      utter.rate = 1.0;
-      speechSynthesis.speak(utter);
+    function replayVoice() {
+      if (lastResponse) speakEcho(lastResponse);
     }
 
-    function replayLast() {
-      if (lastEcho) speak(lastEcho);
+    function resetAll() {
+      beat.pause();
+      beat.src = "";
+      input.value = "";
+      userBars.value = "";
+      stageName.value = "";
+      lastResponse = "";
+      usedIndexes.clear();
+      responseBox.innerHTML = "🎙️ Drop your bars. Echo’s listening...";
     }
 
-    function scoreBar(text) {
-      const punchWords = ["kill", "snap", "trash", "weak", "fire", "burn", "wreck", "smack", "own"];
-      const rhymes = text.match(/(\w+)\s*$/gm) || [];
-      let score = rhymes.length;
-      punchWords.forEach(word => {
-        if (text.toLowerCase().includes(word)) score += 2;
-      });
-      return score;
-    }
+    window.addEventListener('load', () => {
+      speechSynthesis.getVoices();
+    });
 
-    function updateTimer() {
-      timeLeft--;
-      const min = Math.floor(timeLeft / 60);
-      const sec = timeLeft % 60;
-      timerDisplay.innerText = `⏱ Battle Time: ${min}:${sec < 10 ? "0" + sec : sec}`;
-      if (timeLeft <= 0) endBattle();
-    }
-
-    function endBattle() {
-      clearInterval(battleTimer);
-      document.getElementById("battleStats").style.display = "block";
-      let winner;
-      if (userScore > echoScore) winner = "YOU 🔥";
-      else if (echoScore > userScore) winner = "ECHO 👑";
-      else winner = "DRAW 🤝";
-
-      const final = `Battle Over! Final Score\nYou: ${userScore} vs Echo: ${echoScore}\n🏆 Winner: ${winner}`;
-      resultText.innerText = final;
-      speak(`Battle Over. ${winner} wins.`);
-    }
-
-    function resetArena() {
-      battleStarted = false;
-      usedBars.clear();
-      lastEcho = "";
-      userInput.value = "";
-      userBars.innerText = "";
-      response.innerText = "🎙️ Go hard or go home";
-      userScore = 0;
-      echoScore = 0;
-      timeLeft = 120;
-      clearInterval(battleTimer);
-      timerDisplay.innerText = "⏱ Battle Time: 2:00";
-      document.getElementById("battleStats").style.display = "none";
-    }
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.ctrlKey) dropBars();
+    });
   </script>
 </body>
 </html>
-  
