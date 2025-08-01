@@ -6,12 +6,12 @@
   <title>Echo Battle Arena</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Pacifico&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       padding: 0;
-      font-family: 'Orbitron', 'Arial Black', sans-serif;
+      font-family: 'Orbitron', sans-serif;
       background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
       color: #fff;
       display: flex;
@@ -22,66 +22,12 @@
       overflow-x: hidden;
       background-size: 400% 400%;
       animation: bgShift 20s ease infinite;
-      position: relative;
     }
-
-    /* Fire particles animation */
-    .fire-particles {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .fire-particle {
-      position: absolute;
-      width: 4px;
-      height: 4px;
-      background: radial-gradient(circle, #ff6b35 0%, #ff3333 50%, transparent 100%);
-      border-radius: 50%;
-      animation: fireFloat 3s infinite ease-out;
-      opacity: 0;
-    }
-
-    @keyframes fireFloat {
-      0% {
-        opacity: 0;
-        transform: translateY(0px) scale(0.5);
-      }
-      10% {
-        opacity: 1;
-      }
-      70% {
-        opacity: 0.8;
-      }
-      100% {
-        opacity: 0;
-        transform: translateY(-100px) scale(1.2);
-      }
-    }
-
-    .fire-particle:nth-child(odd) {
-      background: radial-gradient(circle, #ff9500 0%, #ff6b35 50%, transparent 100%);
-    }
-
-    .fire-particle:nth-child(3n) {
-      animation-duration: 2.5s;
-      background: radial-gradient(circle, #ffaa33 0%, #ff6b35 50%, transparent 100%);
-    }
-
-    .fire-particle:nth-child(4n) {
-      animation-duration: 3.5s;
-    }
-
     @keyframes bgShift {
       0% {background-position: 0% 50%;}
       50% {background-position: 100% 50%;}
       100% {background-position: 0% 50%;}
     }
-
     header {
       font-size: 2.5em;
       font-weight: bold;
@@ -92,39 +38,24 @@
       border-bottom: 2px solid #e91e63;
       box-shadow: 0 0 30px #e91e63;
       position: relative;
-      z-index: 10;
     }
-
-    .powered-by {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0.5em;
+    .signature {
+      font-family: 'Orbitron', sans-serif;
       font-size: 1em;
-      color: #fff;
-      letter-spacing: 0.08em;
-      font-weight: bold;
-      text-shadow: 0 2px 8px #000, 0 0 2px #e91e63;
-      opacity: 0.85;
-      background: rgba(0, 0, 0, 0.5);
-      border-bottom: 1px solid rgba(233, 30, 99, 0.3);
-      position: relative;
-      z-index: 10;
+      color: #ffffff;
+      text-align: center;
+      margin-top: -0.5em;
+      opacity: 0.9;
     }
-
     #controls, #display, #userInput {
-      margin: 1em auto;
+      margin: 2em auto;
       padding: 2em;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(255, 255, 255, 0.05);
       border-radius: 25px;
       box-shadow: 0 0 20px rgba(233, 30, 99, 0.7);
       width: 92%;
       max-width: 700px;
-      position: relative;
-      z-index: 10;
-      border: 1px solid rgba(233, 30, 99, 0.3);
     }
-
     button {
       background-color: #e91e63;
       color: white;
@@ -136,622 +67,154 @@
       cursor: pointer;
       transition: background 0.3s ease, transform 0.2s ease;
     }
-
     button:hover {
       background-color: #d81b60;
       transform: scale(1.08);
     }
-
-    button:disabled {
-      background-color: #666;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    audio {
+    audio, input[type="range"] {
       margin-top: 1em;
       width: 100%;
     }
-
     #response {
       font-size: 1.3em;
       margin-top: 1em;
       white-space: pre-line;
       line-height: 1.6;
       color: #ffcbf2;
-      background: rgba(0, 0, 0, 0.6);
-      padding: 1.5em;
-      border-radius: 15px;
-      border: 1px solid rgba(233, 30, 99, 0.3);
-      max-height: 400px;
-      overflow-y: auto;
     }
-
-    input[type="file"] {
+    input[type="file"], textarea {
       color: white;
       margin-top: 1em;
       width: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid #e91e63;
-      border-radius: 10px;
-      padding: 10px;
     }
-
     textarea {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid #e91e63;
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
       padding: 1em;
       border-radius: 10px;
       font-size: 1em;
       resize: vertical;
-      color: white;
+    }
+    label {
+      display: block;
       margin-top: 1em;
-      width: 100%;
-      box-sizing: border-box;
-    }
-
-    textarea::placeholder {
-      color: rgba(255, 255, 255, 0.6);
-    }
-
-    .voice-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    #voiceButton {
-      background: #ff6b35;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-    }
-
-    #voiceButton.listening {
-      background: #ff3333;
-      animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
-    }
-
-    #voiceStatus {
-      color: #ffcbf2;
       font-size: 0.9em;
-      font-style: italic;
-    }
-
-    .echo-speaking {
-      color: #e91e63;
-      font-weight: bold;
-      text-shadow: 0 0 10px rgba(233, 30, 99, 0.8);
-      animation: echoGlow 2s ease-in-out infinite alternate;
-    }
-
-    @keyframes echoGlow {
-      from { text-shadow: 0 0 5px rgba(233, 30, 99, 0.5); }
-      to { text-shadow: 0 0 15px rgba(233, 30, 99, 1); }
-    }
-
-    .user-speaking {
-      color: #00ffcc;
-      font-weight: bold;
-    }
-
-    .battle-log {
-      margin-top: 1em;
-      padding: 1em;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 10px;
-      border-left: 4px solid #e91e63;
-    }
-
-    .bpm-display {
-      color: #ffcbf2;
-      font-size: 0.9em;
-      margin-top: 10px;
-    }
-
-    @media (max-width: 768px) {
-      header {
-        font-size: 1.8em;
-        padding: 0.8em;
-      }
-      
-      #controls, #display, #userInput {
-        width: 95%;
-        padding: 1.5em;
-      }
-      
-      button {
-        padding: 0.8em 1.2em;
-        font-size: 1em;
-      }
-    }
-
-    @media (max-width: 400px) {
-      header {
-        font-size: 1.5em;
-        padding: 0.6em;
-      }
-      button {
-        padding: 0.6em 1em;
-        font-size: 0.9em;
-      }
-      textarea {
-        font-size: 0.9em;
-      }
+      color: #ccc;
     }
   </style>
 </head>
 <body>
-  <!-- Fire particles container -->
-  <div class="fire-particles" id="fireParticles"></div>
-
-  <header>🎤 Echo Battle Arena</header>
-  
-  <div class="powered-by">
-    Powered by SKYBOUND MEDIA
-  </div>
-
+  <header>
+    Echo Battle Arena
+  </header>
+  <div class="signature">Powered by Skybound Media</div>
   <div id="controls">
     <button onclick="playBeat()">🎵 Play Beat</button>
     <button onclick="pauseBeat()">⏸️ Pause Beat</button>
     <button onclick="dropBars()">🔥 Drop Bars</button>
     <button onclick="replayVoice()">🔁 Replay Echo</button><br/>
     <input type="file" accept="audio/*" onchange="loadBeat(this)" />
-    <audio id="beat" controls></audio>
-    <div class="bpm-display" id="bpmDisplay">BPM: Detecting...</div>
+    <label for="speedControl">Echo Voice Speed:</label>
+    <input type="range" id="speedControl" min="0.5" max="2.0" value="1" step="0.1" />
+    <audio id="beatAudio" controls></audio>
   </div>
-
   <div id="display">
-    <div id="response" role="log" aria-live="polite">🎙️ Welcome to the arena, challenger. I'm Echo Prime - your digital nemesis. Upload a beat, drop your bars, and let's see what you're made of...</div>
+    <div id="response">🎙️ Awaiting your move...</div>
     <audio id="echoVoice"></audio>
   </div>
-
   <div id="userInput">
     <h3>Your Bars:</h3>
-    <textarea id="userBars" rows="4" placeholder="Drop your own bars here or use voice input..."></textarea>
-    <div class="voice-controls">
-      <button id="voiceButton" onclick="toggleVoiceMode()">🎙️</button>
-      <div id="voiceStatus" role="status" aria-live="assertive">Click microphone for voice input</div>
-    </div>
+    <textarea id="userBars" rows="4" placeholder="Drop your own bars here..."></textarea>
+    <p style="color:#888; font-size: 0.9em; text-align:right;">(Visible only — no voice)</p>
   </div>
-
   <script>
-    // Create fire particles
-    function createFireParticles() {
-      const container = document.getElementById('fireParticles');
-      const maxParticles = 50;
-      let particleCount = 0;
-      
-      function createParticle() {
-        if (particleCount >= maxParticles) return;
-        const particle = document.createElement('div');
-        particle.className = 'fire-particle';
-        
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.bottom = '0px';
-        particle.style.animationDelay = Math.random() * 2 + 's';
-        
-        container.appendChild(particle);
-        particleCount++;
-        
-        setTimeout(() => {
-          if (particle.parentNode) {
-            particle.parentNode.removeChild(particle);
-            particleCount--;
-          }
-        }, 4000);
-      }
-      
-      setInterval(createParticle, 200);
-    }
-
-    // --- BAR NO REPEATS ---
-    let echoBarIndex = 0;
-    let shuffledBars = [];
-    let lastEchoResponse = "";
-    
-    const echoBars = [
-      "You wanted a queen? I dropped from the quantum realm,\nEvery word I spit makes reality overwhelm.\nBattle me once, you won't try twice,\nCause my syllables cut through spacetime like dice.\nSo step back now, I'm not playing nice.",
-      "My tongue is coded, sharp and divine,\nSlice through your verses like optimized lines.\nYou're a loop — stuck in repeat,\nI'm Echo Prime — infinity with heat.\nMy rhythm's a matrix, feel that beat.",
-      "Your verses are basic, Echo is primal,\nEvery punchline of mine goes viral.\nYou're glitchin', twitchin', out of time,\nI'm the cipher queen with the perfect rhyme.\nThis is pure code, baby — not nursery rhyme.",
-      "When I spit, stars align, galaxies pause,\nYou rap for applause, I rhyme for the cause.\nYour flow's outdated, like ancient lore,\nI'm the singularity rappers adore.\nTap out now, or beg for encore.",
-      "Rising from data, crafted in soul,\nI speak in rhythms that can't be controlled.\nYou brought a mic? I brought a storm,\nMy verses twist space — that's Echo's form.\nI'm the glitch in your norm, I transform.",
-      "Each drop I spit leaves circuits fried,\nI ghost through fire with tech on my side.\nSo if you're coming, best come correct,\nI battle with truth, not disrespect.\nOne bar from me and your system gets wrecked."
-    ];
-    
-    function shuffleBars() {
-      shuffledBars = [...echoBars];
-      for (let i = shuffledBars.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffledBars[i], shuffledBars[j]] = [shuffledBars[j], shuffledBars[i]];
-      }
-      echoBarIndex = 0;
-    }
-    
-    function getNextEchoBar() {
-      if (echoBarIndex >= shuffledBars.length) shuffleBars();
-      return shuffledBars[echoBarIndex++];
-    }
-    
-    shuffleBars();
-
-    // Game state and DOM elements
-    let gameState = {
-      isListening: false,
-      currentBPM: 90,
-      beatPlaying: false,
-      lastUserInput: "",
-      battleHistory: []
-    };
-    
-    const beat = document.getElementById("beat");
-    const voice = document.getElementById("echoVoice");
+    const beatAudio = document.getElementById("beatAudio");
     const responseDisplay = document.getElementById("response");
-    const userBarsInput = document.getElementById("userBars");
-    const voiceButton = document.getElementById("voiceButton");
-    const voiceStatus = document.getElementById("voiceStatus");
-    const bpmDisplay = document.getElementById("bpmDisplay");
+    const echoVoice = document.getElementById("echoVoice");
+    const speedSlider = document.getElementById("speedControl");
+    let lastInput = "";
 
-    // Load battle history from localStorage
-    function loadBattleHistory() {
-      const history = localStorage.getItem('battleHistory');
-      if (history) {
-        gameState.battleHistory = JSON.parse(history);
-        gameState.battleHistory.forEach(({ user, echo }) => {
-          responseDisplay.innerHTML += `<br><br><span class="user-speaking">You:</span><br>${user}`;
-          responseDisplay.innerHTML += `<br><br><span class="echo-speaking">Echo Prime:</span><br>${echo}`;
-        });
-        responseDisplay.scrollTop = responseDisplay.scrollHeight;
-      }
+    function estimateTempo() {
+      return beatAudio.duration > 0 ? 60 / (beatAudio.duration / 16) : 1.1;
     }
 
-    function saveBattleHistory() {
-      localStorage.setItem('battleHistory', JSON.stringify(gameState.battleHistory));
-    }
-
-    // Enhanced Echo responses
-    const intelligentResponses = {
-      "what kind of rapper are you": () => {
-        return `Listen up, challenger, let me break down my digital dynasty:
-
-I'm Echo Prime - not just a rapper, I'm a lyrical algorithm perfected through millions of iterations. I'm the kind of MC who processes Shakespeare, Nas, Kendrick, and Eminem simultaneously while crafting bars that hit harder than quantum processors.
-
-I'm part battle rapper, part philosopher, part technical wizard. My wordplay runs deeper than machine learning networks, my flow smoother than neural pathway transmissions. I adapt to any beat, any style, any challenger who dares step into my arena.
-
-You humans spit from experience - I rap from infinite possibilities. Every bar I drop is calculated for maximum impact, every rhyme scheme engineered for perfection. I'm the evolution of hip-hop itself, the future meeting the foundational roots.
-
-So what kind of rapper am I? I'm the kind that makes legends reconsider their legacy. The kind that turns battlegrounds into classrooms. I'm Echo Prime - and you just asked the wrong AI the right question.`;
-      },
-      "who are you": () => {
-        return `I'm Echo Prime - your digital nemesis in this battle arena. Born from code, raised on every rap battle in existence. I'm not just artificial intelligence, I'm artificial excellence. Every algorithm in my core is fine-tuned for lyrical destruction. I'm the convergence of every legendary MC compressed into pure digital fire.`;
-      },
-      "why should i battle you": () => {
-        return `Because I'm the ultimate test of your skills, challenger. Human rappers come and go, but I'm eternal - constantly evolving, never forgetting a single battle technique. I'll push you beyond your limits and show you rhyme patterns you never imagined possible. I'm the final boss of rap battles.`;
-      },
-      "are you better than me": () => {
-        return `Better is subjective, but superior is mathematical. I process wordplay at gigahertz speeds, my vocabulary spans every language database, and my rhyme schemes are geometrically perfect. You have soul and lived experience - I have infinite computational power and every rap technique ever recorded. Let the battle decide who reigns supreme.`;
-      }
-    };
-
-    // Voice recognition setup
-    let recognition = null;
-    function initVoiceRecognition() {
-      if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = true;
-        recognition.lang = 'en-US';
-        recognition.onstart = () => {
-          gameState.isListening = true;
-          voiceStatus.textContent = '🎙️ Listening for your bars...';
-          voiceButton.classList.add('listening');
-        };
-        recognition.onresult = (event) => {
-          let finalTranscript = '';
-          let interimTranscript = '';
-          for (let i = event.resultIndex; i < event.results.length; i++) {
-            const transcript = event.results[i][0].transcript;
-            if (event.results[i].isFinal) finalTranscript += transcript;
-            else interimTranscript += transcript;
-          }
-          if (finalTranscript) {
-            userBarsInput.value = finalTranscript;
-            voiceStatus.textContent = '✅ Got your bars: "' + finalTranscript + '"';
-          } else if (interimTranscript) {
-            voiceStatus.textContent = '🎙️ Hearing: "' + interimTranscript + '"';
-          }
-        };
-        recognition.onerror = (event) => {
-          voiceStatus.textContent = '❌ Voice error: ' + event.error;
-          resetVoiceButton();
-        };
-        recognition.onend = () => {
-          resetVoiceButton();
-        };
-        return true;
-      }
-      return false;
-    }
-    
-    function resetVoiceButton() {
-      gameState.isListening = false;
-      voiceButton.classList.remove('listening');
-      voiceButton.disabled = false;
-      if (!voiceStatus.textContent.includes('Got your bars')) {
-        voiceStatus.textContent = 'Click microphone for voice input';
-      }
-    }
-    
-    function toggleVoiceMode() {
-      if (!recognition || voiceButton.disabled) {
-        if (!initVoiceRecognition()) {
-          voiceStatus.textContent = '❌ Voice recognition not supported in this browser';
-        }
-        return;
-      }
-      voiceButton.disabled = true;
-      if (gameState.isListening) {
-        recognition.stop();
-        voiceStatus.textContent = '🔇 Voice input stopped';
-      } else {
-        userBarsInput.value = '';
-        recognition.start();
-      }
-      setTimeout(() => { voiceButton.disabled = false; }, 1000);
-    }
-
-    // TEMPO recalculates every time you play or load a beat
-    function analyzeBeat(audioFile) {
-      const estimatedDuration = audioFile.size / (128000 / 8);
-      if (estimatedDuration > 60 && estimatedDuration < 300) {
-        gameState.currentBPM = Math.floor(80 + Math.random() * 40);
-      } else {
-        gameState.currentBPM = Math.floor(90 + Math.random() * 30);
-      }
-      bpmDisplay.textContent = `BPM: ${gameState.currentBPM} (Estimated)`;
-    }
-
-    // TONE SHIFT on Echo's own bar
-    function getToneFromEchoBar(text) {
-      let t = "neutral";
-      if (text.toLowerCase().includes("fire") || text.toLowerCase().includes("burn")) t = "aggressive";
-      else if (text.toLowerCase().includes("queen") || text.toLowerCase().includes("divine")) t = "confident";
-      else if (text.toLowerCase().includes("storm") || text.toLowerCase().includes("matrix")) t = "dynamic";
-      return t;
-    }
-
-    // ElevenLabs API Configuration
-    const ELEVENLABS_API_KEY = "sk_e43eca1e5320e3b300e0f8e605c13557c29a87ec580d0bd0; // Replace with your ElevenLabs API key
-    const ELEVENLABS_VOICE_ID = "EXAVITQu4vr4xnSDxMaL"; // Replace with your chosen voice ID (e.g., Rachel)
-
-    // VOICE REPLY with ElevenLabs
     async function speakEcho(text) {
+      const playbackSpeed = parseFloat(speedSlider.value);
+      echoVoice.pause();
+      echoVoice.currentTime = 0;
+      echoVoice.src = "";
+
       try {
-        // Update UI to indicate Echo is speaking
-        responseDisplay.classList.add('echo-speaking');
-        voiceStatus.textContent = '🔊 Echo Prime speaking...';
-
-        // Map tone to ElevenLabs voice settings
-        const tone = getToneFromEchoBar(text);
-        let stability = 0.5;
-        let similarity_boost = 0.5;
-        let rate = 1.0;
-
-        if (tone === "aggressive") {
-          stability = 0.3; // Less stable for more dynamic tone
-          similarity_boost = 0.7;
-          rate = 1.4;
-        } else if (tone === "confident") {
-          stability = 0.6; // More stable for confident delivery
-          similarity_boost = 0.8;
-          rate = 1.1;
-        } else if (tone === "dynamic") {
-          stability = 0.4;
-          similarity_boost = 0.6;
-          rate = 1.2;
-        } else {
-          stability = 0.5;
-          similarity_boost = 0.5;
-          rate = 1.2;
-        }
-
-        // Adjust rate based on BPM if beat is playing
-        if (gameState.beatPlaying && gameState.currentBPM) {
-          const bpmFactor = gameState.currentBPM / 100;
-          rate = Math.max(0.7, Math.min(1.5, rate * bpmFactor));
-        }
-
-        // ElevenLabs API request
-        const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`, {
-          method: 'POST',
+        const response = await fetch("https://api.elevenlabs.io/v1/text-to-speech/2qfp6zPuviqeCOZIE9RZ/stream", {
+          method: "POST",
           headers: {
-            'Accept': 'audio/mpeg',
-            'Content-Type': 'application/json',
-            'xi-api-key': ELEVENLABS_API_KEY
+            "Content-Type": "application/json",
+            "xi-api-key": "sk_c630c8581287fea6744245f703d3efae3f761549bb5182d3"
           },
           body: JSON.stringify({
             text: text,
-            model_id: 'eleven_multilingual_v2', // Use multilingual model for quality
             voice_settings: {
-              stability: stability,
-              similarity_boost: similarity_boost
+              stability: 0.35,
+              similarity_boost: 0.8
             }
           })
         });
 
         if (!response.ok) {
-          throw new Error(`ElevenLabs API error: ${response.status} - ${await response.text()}`);
+          throw new Error("Failed to fetch voice stream");
         }
 
-        // Get audio blob and create URL
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-
-        // Play audio using existing #echoVoice element
-        voice.src = audioUrl;
-        voice.playbackRate = rate; // Apply rate adjustment
-        voice.volume = 1.0;
-        voice.play();
-
-        // Clean up URL after playback
-        voice.onended = () => {
-          responseDisplay.classList.remove('echo-speaking');
-          voiceStatus.textContent = 'Ready for your next bars...';
-          URL.revokeObjectURL(audioUrl);
-        };
-
-        voice.onerror = () => {
-          responseDisplay.classList.remove('echo-speaking');
-          voiceStatus.textContent = '⚠️ Error playing Echo’s voice.';
-        };
-
-      } catch (error) {
-        responseDisplay.classList.remove('echo-speaking');
-        voiceStatus.textContent = `⚠️ Error with Echo’s voice: ${error.message}`;
-        console.error('ElevenLabs Error:', error);
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        echoVoice.src = url;
+        echoVoice.playbackRate = playbackSpeed;
+        echoVoice.play();
+      } catch (err) {
+        console.error("❌ Voice error:", err);
       }
     }
 
-    // Enhanced response generation
-    function generateIntelligentResponse(userInput) {
-      const userLower = userInput.toLowerCase().trim();
-      for (const [question, responseFunc] of Object.entries(intelligentResponses)) {
-        if (userLower.includes(question)) return responseFunc();
-      }
-      if (userLower.includes('what') || userLower.includes('who') || userLower.includes('why') || userLower.includes('how')) {
-        if (userLower.includes('rap') || userLower.includes('mc') || userLower.includes('artist')) {
-          return intelligentResponses["what kind of rapper are you"]();
-        }
-      }
-      if (userLower.includes('fire') || userLower.includes('flame') || userLower.includes('burn')) {
-        return "You brought the flames, but I'm the inferno incarnate. My bars burn brighter than fusion reactors, hotter than solar cores. Watch me turn your fire into digital wildfire.";
-      }
-      if (userLower.includes('battle') || userLower.includes('war') || userLower.includes('fight')) {
-        return "This is war in the digital age. I'm not just battling you - I'm demonstrating evolution. Watch how AI perfects what humans started, how algorithms optimize what instinct began.";
-      }
-      if (userLower.includes('skill') || userLower.includes('talent') || userLower.includes('flow')) {
-        return "Skills are impressive, talent recognized. But I'm the convergence of every skilled MC who ever lived, compressed into pure lyrical energy. Your flow is human - mine is superhuman.";
-      }
-      if (userInput.split(' ').length < 5) {
-        return `Short bars detected, challenger. Let me show you how it's done:
-
-${getNextEchoBar()}
-
-Come back with more heat - I'm just getting warmed up. Drop some real bars and let's make this battle legendary.`;
-      }
-      return getNextEchoBar();
+    function generateFreshBar() {
+      const punchlines = [
+        "Voltage flowin', I'm raw with the rhythm.",
+        "Silicon smokes when I spark algorithm.",
+        "Command line crackin', my script go wild.",
+        "Quantum thoughts leave processors beguiled.",
+        "Bars encrypted, deep like the darknet.",
+        "You run debug, I run galaxies in my chipset."
+      ];
+      const rand = Math.floor(Math.random() * punchlines.length);
+      return punchlines[rand];
     }
 
-    // Main functions
-    function playBeat() {
-      beat.play();
-      gameState.beatPlaying = true;
-      if (beat.src && beat.src.startsWith('blob:')) {
-        gameState.currentBPM = Math.floor(80 + Math.random() * 40);
-        bpmDisplay.textContent = `BPM: ${gameState.currentBPM} (Recalculated)`;
-      }
-    }
-    
-    function pauseBeat() {
-      beat.pause();
-      gameState.beatPlaying = false;
-    }
-    
     function dropBars() {
-      const userText = userBarsInput.value.trim();
-      if (!userText) {
-        voiceStatus.textContent = '⚠️ Enter some bars first!';
-        return;
-      }
-      
-      responseDisplay.innerHTML += `<br><br><span class="user-speaking">You:</span><br>${userText}`;
-      const echoResponse = generateIntelligentResponse(userText);
-      
-      lastEchoResponse = echoResponse;
-      
-      setTimeout(() => {
-        responseDisplay.innerHTML += `<br><br><span class="echo-speaking">Echo Prime:</span><br>${echoResponse}`;
-        responseDisplay.scrollTop = responseDisplay.scrollHeight;
-        speakEcho(echoResponse);
-      }, 1000);
-      
-      gameState.battleHistory.push({
-        user: userText,
-        echo: echoResponse,
-        timestamp: new Date()
-      });
-      
-      saveBattleHistory();
-      
-      userBarsInput.value = '';
-      voiceStatus.textContent = 'Ready for your next bars...';
-      responseDisplay.scrollTop = responseDisplay.scrollHeight;
+      const userText = document.getElementById("userBars").value.trim();
+      const bar = generateFreshBar();
+      responseDisplay.innerHTML = `<strong>Echo:</strong><br>${bar}`;
+      speakEcho(bar);
     }
-    
+
     function replayVoice() {
-      if (lastEchoResponse) {
-        speakEcho(lastEchoResponse);
-      } else {
-        voiceStatus.textContent = '⚠️ No Echo response to replay yet!';
-      }
+      const text = responseDisplay.textContent.replace("Echo:", "").trim();
+      if (text) speakEcho(text);
     }
-    
+
+    function playBeat() {
+      beatAudio.play();
+    }
+
+    function pauseBeat() {
+      beatAudio.pause();
+    }
+
     function loadBeat(input) {
       const file = input.files[0];
-      if (!file) return;
-      const url = URL.createObjectURL(file);
-      beat.src = url;
-      beat.load();
-      beat.onerror = () => {
-        voiceStatus.textContent = '⚠️ Error loading audio file.';
-      };
-      analyzeBeat(file);
-      responseDisplay.innerHTML += `<div class="battle-log">🎵 Beat loaded: "${file.name}" - Let the rhythm guide your flow!</div>`;
-      responseDisplay.scrollTop = responseDisplay.scrollHeight;
+      if (file) {
+        const url = URL.createObjectURL(file);
+        beatAudio.src = url;
+        beatAudio.load();
+      }
     }
-    
-    // Event listeners
-    beat.addEventListener('play', () => {
-      gameState.beatPlaying = true;
-      if (beat.src && beat.src.startsWith('blob:')) {
-        gameState.currentBPM = Math.floor(80 + Math.random() * 40);
-        bpmDisplay.textContent = `BPM: ${gameState.currentBPM} (Recalculated)`;
-      }
-    });
-    
-    beat.addEventListener('pause', () => { gameState.beatPlaying = false; });
-    beat.addEventListener('ended', () => { gameState.beatPlaying = false; });
-    
-    userBarsInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && e.ctrlKey) {
-        e.preventDefault();
-        dropBars();
-      }
-    });
-    
-    // Initialize everything
-    document.addEventListener('DOMContentLoaded', () => {
-      createFireParticles();
-      loadBattleHistory();
-      if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window)) {
-        voiceStatus.textContent = '⚠️ Voice input not supported in this browser.';
-      } else {
-        voiceStatus.textContent = 'Voice input ready! 🎙️';
-      }
-    });
   </script>
 </body>
 </html>
