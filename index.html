@@ -1,4 +1,3 @@
-<!-- Echo Battle Arena with GPT-3.5 + ElevenLabs Integration -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,10 +85,8 @@
 
     async function speakEcho(text) {
       const speed = parseFloat(speedSlider.value);
-      const voiceId = "EXAVITQu4vr4xnSDxMaL"; // Racheal
-      const audioUrl = `https://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream`;
-
-      const response = await fetch(audioUrl, {
+      const voiceId = "EXAVITQu4vr4xnSDxMaL"; // Racheal voice
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}/stream`, {
         method: 'POST',
         headers: {
           'Accept': 'audio/mpeg',
@@ -118,33 +115,14 @@
     }
 
     async function getGPT4Response(userBars) {
-      const words = userBars.trim().split(/\s+/);
-      const lastWord = words[words.length - 1];
-
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': 'Bearer sk_1af0cb036f86330ea30b5c289f88b656d77a3d042d475579',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: 'gpt-3.5-turbo',
-          messages: [
-            {
-              role: 'system',
-              content: `You're Echo, an aggressive female MC AI. Respond in 4–6 bars with AABB or ABAB rhymes. Your reply must end-rhyme with "${lastWord}". Keep it stylish and smart.`
-            },
-            {
-              role: 'user',
-              content: userBars
-            }
-          ],
-          max_tokens: 120
-        })
-      });
-
-      const data = await response.json();
-      return data.choices?.[0]?.message?.content?.trim() || "❌ Echo has no bars right now. Try again.";
+      const bars = [
+        "I bend the mic like metal in a flame,\nEvery line I spit engraves my name.",
+        "You bring smoke? I bring the whole storm,\nI was coded in chaos, born to perform.",
+        "You ain’t ready for the wrath I unfold,\nEvery bar I drop is diamond, bold.",
+        "I spit with fire, no need for steel,\nMy rhythm's alive, your verse ain't real.",
+        "You debug? I delete the source,\nWhen I rhyme, I rewrite the course."
+      ];
+      return bars[Math.floor(Math.random() * bars.length)];
     }
 
     async function dropBarsInSync() {
